@@ -1,16 +1,48 @@
-import { motion, useReducedMotion } from 'framer-motion';
-import { ReactNode } from 'react';
+import { motion, type Variant, useReducedMotion } from 'framer-motion';
+import type { HTMLAttributes, ReactNode } from 'react';
 
-export function ScrollReveal({ children, y = 24, delay = 0, className = '' }: { children: ReactNode; y?: number; delay?: number; className?: string }) {
+interface ScrollRevealProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+  y?: number;
+  x?: number;
+  delay?: number;
+  duration?: number;
+  scale?: number;
+  once?: boolean;
+}
+
+export function ScrollReveal({
+  children,
+  y = 24,
+  x = 0,
+  delay = 0,
+  duration = 0.6,
+  scale,
+  once = true,
+  className,
+  ...props
+}: ScrollRevealProps) {
   const reduced = useReducedMotion();
-  if (reduced) return <div className={className}>{children}</div>;
+
+  if (reduced) {
+    return (
+      <div className={className} {...props}>
+        {children}
+      </div>
+    );
+  }
+
+  const hidden: Variant = { opacity: 0, y, x, ...(scale ? { scale } : {}) };
+  const visible: Variant = { opacity: 1, y: 0, x: 0, scale: 1 };
+
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.65, ease: 'easeOut', delay }}
+      initial={hidden}
+      whileInView={visible}
+      viewport={{ once, margin: '-80px' }}
+      transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
+      {...props}
     >
       {children}
     </motion.div>
