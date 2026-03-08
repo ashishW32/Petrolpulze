@@ -2,6 +2,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 import {
   Activity,
   ArrowRight,
+  BatteryCharging,
+  CarFront,
   ChartBar,
   Compass,
   GaugeCircle,
@@ -9,6 +11,7 @@ import {
   Milestone,
   Navigation,
   Route,
+  Smartphone,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { FloatingCard } from '../components/animation/FloatingCard';
@@ -42,6 +45,64 @@ function AnimatedProgress({ value }: { value: number }) {
         viewport={{ once: true }}
         transition={reduced ? { duration: 0 } : { duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
       />
+    </div>
+  );
+}
+
+function HeroDeviceVisual({ reduced }: { reduced: boolean }) {
+  return (
+    <div className="relative mx-auto w-full max-w-[430px]">
+      <motion.div
+        className="relative mx-auto h-[400px] w-[220px] overflow-hidden rounded-[2.3rem] border-[7px] border-slate-900 bg-gradient-to-b from-slate-800 to-slate-900 p-3 shadow-[0_30px_70px_-28px_rgba(15,23,42,0.85)]"
+        animate={reduced ? undefined : { rotate: [-10, -8, -10] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <div className="h-full rounded-[1.7rem] bg-gradient-to-b from-slate-700/70 to-slate-900/85 p-4">
+          <div className="mb-4 h-1.5 w-16 rounded-full bg-slate-500/60" />
+          <div className="route-grid h-full rounded-[1.2rem] border border-white/10 bg-route-grid bg-slate-800/60" />
+        </div>
+
+        <motion.div
+          className="absolute left-8 top-44 h-10 w-10 rounded-full border border-cyan-300/60 bg-cyan-400/20"
+          animate={reduced ? undefined : { scale: [1, 1.18, 1], opacity: [0.5, 0.95, 0.5] }}
+          transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+        />
+
+        <motion.div
+          className="absolute left-7 top-[46%]"
+          animate={reduced ? undefined : { x: [0, 64, 122], y: [0, -28, 20] }}
+          transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <div className="relative">
+            <div className="h-11 w-20 rounded-[18px] bg-white shadow-[0_10px_22px_-12px_rgba(15,23,42,0.75)]" />
+            <CarFront size={20} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-800" />
+            <div className="absolute -bottom-1.5 left-2 h-3 w-3 rounded-full bg-slate-900" />
+            <div className="absolute -bottom-1.5 right-2 h-3 w-3 rounded-full bg-slate-900" />
+          </div>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="absolute -left-2 top-8 rounded-2xl border border-slate-200/70 bg-white/90 p-3 text-slate-700 shadow-sm"
+        animate={reduced ? undefined : { y: [0, -6, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+          <Smartphone size={14} /> Live device sync
+        </div>
+        <p className="mt-1 text-sm font-bold">Route connected</p>
+      </motion.div>
+
+      <motion.div
+        className="absolute -right-3 bottom-12 rounded-2xl border border-slate-200/70 bg-white/90 p-3 text-slate-700 shadow-sm"
+        animate={reduced ? undefined : { y: [0, -5, 0] }}
+        transition={{ duration: 5.4, delay: 0.5, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+          <BatteryCharging size={14} /> EV Ready
+        </div>
+        <p className="mt-1 text-sm font-bold">82% charge near route</p>
+      </motion.div>
     </div>
   );
 }
@@ -100,19 +161,18 @@ export function AboutPage() {
             </motion.div>
           </motion.div>
 
-          <div className="grid gap-4 self-end lg:max-w-sm">
-            <FloatingCard className="border-slate-200/50 bg-white/80" delay={0.1}>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Status</p>
-              <p className="mt-2 text-xl font-bold text-slate-800">Diesel available</p>
-            </FloatingCard>
-            <FloatingCard className="border-slate-200/50 bg-white/80" delay={0.2}>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Closest Station</p>
-              <p className="mt-2 text-xl font-bold text-slate-800">2.4 km from your route</p>
-            </FloatingCard>
-            <FloatingCard className="border-slate-200/50 bg-white/80" delay={0.3}>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Availability</p>
-              <p className="mt-2 text-xl font-bold text-green-700">Open now</p>
-            </FloatingCard>
+          <div className="relative self-end lg:max-w-sm">
+            <HeroDeviceVisual reduced={reduced} />
+            <div className="mt-4 grid gap-3">
+              <FloatingCard className="border-slate-200/60 bg-white/85" delay={0.1}>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Status</p>
+                <p className="mt-2 text-xl font-bold text-slate-800">Diesel available</p>
+              </FloatingCard>
+              <FloatingCard className="border-slate-200/60 bg-white/85" delay={0.2}>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Closest Station</p>
+                <p className="mt-2 text-xl font-bold text-slate-800">2.4 km from your route</p>
+              </FloatingCard>
+            </div>
           </div>
         </div>
       </section>
